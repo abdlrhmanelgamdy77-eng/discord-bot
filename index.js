@@ -4,11 +4,18 @@ const { Client, Collection, GatewayIntentBits, Partials } = require("discord.js"
 const db = require("pro.db");
 
 // Load config from environment variables or config.json
+let localConfig = {};
+try {
+  localConfig = require("./config.json");
+} catch (e) {
+  // config.json not found (running on Railway)
+}
+
 const config = {
-  token: process.env.TOKEN || require("./config.json").token,
-  botId: process.env.botId || require("./config.json").botId,
-  Guild: process.env.Guild || require("./config.json").Guild,
-  owners: process.env.owners?.split(",") || require("./config.json").owners
+  token: process.env.TOKEN || localConfig.token,
+  botId: process.env.botId || localConfig.botId,
+  Guild: process.env.Guild || localConfig.Guild,
+  owners: process.env.owners?.split(",") || localConfig.owners
 };
 
 const client = new Client({
