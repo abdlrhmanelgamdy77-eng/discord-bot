@@ -2,7 +2,14 @@ const fs = require("fs");
 const path = require("path");
 const { Client, Collection, GatewayIntentBits, Partials } = require("discord.js");
 const db = require("pro.db");
-const config = require("./config.json");
+
+// Load config from environment variables or config.json
+const config = {
+  token: process.env.TOKEN || require("./config.json").token,
+  botId: process.env.botId || require("./config.json").botId,
+  Guild: process.env.Guild || require("./config.json").Guild,
+  owners: process.env.owners?.split(",") || require("./config.json").owners
+};
 
 const client = new Client({
   intents: [
