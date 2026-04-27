@@ -9,14 +9,21 @@ try {
   localConfig = require("./config.json");
 } catch (e) {
   // config.json not found (running on Railway)
+  console.log("Running on Railway - using environment variables");
 }
 
 const config = {
-  token: process.env.TOKEN || localConfig.token,
-  botId: process.env.botId || localConfig.botId,
-  Guild: process.env.Guild || localConfig.Guild,
-  owners: process.env.owners?.split(",") || localConfig.owners
+  token: process.env.TOKEN || localConfig?.token,
+  botId: process.env.botId || localConfig?.botId,
+  Guild: process.env.Guild || localConfig?.Guild,
+  owners: process.env.owners?.split(",") || localConfig?.owners
 };
+
+// Validate required config
+if (!config.token) {
+  console.error("❌ ERROR: No TOKEN found! Please set TOKEN environment variable.");
+  process.exit(1);
+}
 
 const client = new Client({
   intents: [
