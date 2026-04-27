@@ -12,8 +12,16 @@ try {
   console.log("Running on Railway - using environment variables");
 }
 
+const tokenEnvName = process.env.TOKEN
+  ? "TOKEN"
+  : process.env.DISCORD_TOKEN
+  ? "DISCORD_TOKEN"
+  : process.env.BOT_TOKEN
+  ? "BOT_TOKEN"
+  : null;
+
 const config = {
-  token: process.env.TOKEN || localConfig?.token,
+  token: process.env.TOKEN || process.env.DISCORD_TOKEN || process.env.BOT_TOKEN || localConfig?.token,
   botId: process.env.botId || localConfig?.botId,
   Guild: process.env.Guild || localConfig?.Guild,
   owners: process.env.owners?.split(",") || localConfig?.owners
@@ -21,8 +29,12 @@ const config = {
 
 // Validate required config
 if (!config.token) {
-  console.error("❌ ERROR: No TOKEN found! Please set TOKEN environment variable.");
+  console.error("❌ ERROR: No TOKEN found! Please set TOKEN, DISCORD_TOKEN, or BOT_TOKEN environment variable.");
   process.exit(1);
+}
+
+if (tokenEnvName) {
+  console.log(`Using bot token from environment variable: ${tokenEnvName}`);
 }
 
 const client = new Client({
