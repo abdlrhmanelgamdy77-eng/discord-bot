@@ -6,8 +6,8 @@ module.exports = async (client, oldRole, newRole) => {
 
 
         let logroles = db.get(`logroles_${oldRole.guild.id}`); 
-        if (!oldRole.guild.me.permissions.has('EMBED_LINKS')) return;
-        if (!oldRole.guild.me.permissions.has('VIEW_AUDIT_LOG')) return;
+        if (!oldRole.guild.members.me || !oldRole.guild.members.me.permissions.has('EMBED_LINKS')) return;
+        if (!oldRole.guild.members.me.permissions.has('VIEW_AUDIT_LOG')) return;
       
         var logChannel = oldRole.guild.channels.cache.find((c) => c.id === logroles);
         if (!logChannel) return;
